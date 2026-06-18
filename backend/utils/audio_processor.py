@@ -27,11 +27,17 @@ def download_youtube_audio(url :str) ->str:
         "preferredcodec": "wav",
         "preferredquality": "192",
     }],
-}
+    }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=True)
-        filename = ydl.prepare_filename(info).replace(".webm", ".wav").replace(".m4a", ".wav")
-    return filename
+         info = ydl.extract_info(url, download=True)
+
+         base = os.path.splitext(
+         ydl.prepare_filename(info)
+         )[0]
+
+         filename = base + ".wav"
+
+         return filename 
 
 def convert_to_wav(input_path: str) -> str:
     """Convert any audio/video file to WAV format using pydub."""
