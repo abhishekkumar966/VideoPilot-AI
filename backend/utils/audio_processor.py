@@ -12,7 +12,9 @@ def download_youtube_audio(url :str) ->str:
     ydl_opts = {
     "format": "bestaudio/best",
     "outtmpl": output_path,
-    "ffmpeg_location": r"C:\Users\akrao\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1.1-full_build\bin",
+    "ffmpeg_location": "/usr/bin",
+    
+    # "ffmpeg_location": r"C:\Users\akrao\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1.1-full_build\bin",
     "postprocessors": [{
         "key": "FFmpegExtractAudio",
         "preferredcodec": "wav",
