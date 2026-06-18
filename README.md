@@ -1,4 +1,4 @@
-# 🎥 VideoPilot AI
+#  VideoPilot AI
 
 VideoPilot AI is an AI-powered video analysis platform that transcribes YouTube videos and local files, generates summaries, extracts action items, key decisions, and open questions, and enables RAG-based chat with content.
 
