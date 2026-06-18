@@ -14,8 +14,6 @@ def download_youtube_audio(url :str) ->str:
     "outtmpl": output_path,
     "cookiefile": "/home/ubuntu/VideoPilot-AI/backend/cookies.txt",
     "ffmpeg_location": "/usr/bin",
-    "js_runtimes": ["node"],
-    "remote_components": ["ejs:github"],
     "postprocessors": [{
         "key": "FFmpegExtractAudio",
         "preferredcodec": "wav",
