@@ -14,8 +14,6 @@ def download_youtube_audio(url :str) ->str:
     "outtmpl": output_path,
     "ffmpeg_location": "/usr/bin",
     "cookiefile": "cookies.txt",
-    
-    # "ffmpeg_location": r"C:\Users\akrao\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1.1-full_build\bin",
     "postprocessors": [{
         "key": "FFmpegExtractAudio",
         "preferredcodec": "wav",
