@@ -12,15 +12,16 @@ def download_youtube_audio(url :str) ->str:
     ydl_opts = {
     "format": "bestaudio/best",
     "outtmpl": output_path,
+    "cookiefile": "/home/ubuntu/VideoPilot-AI/backend/cookies.txt",
     "ffmpeg_location": "/usr/bin",
-    "cookiefile": "cookies.txt",
+    "js_runtimes": ["node"],
+    "remote_components": ["ejs:github"],
     "postprocessors": [{
         "key": "FFmpegExtractAudio",
         "preferredcodec": "wav",
         "preferredquality": "192",
     }],
 }
-
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=True)
         filename = ydl.prepare_filename(info).replace(".webm", ".wav").replace(".m4a", ".wav")
