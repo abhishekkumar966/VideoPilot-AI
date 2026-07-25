@@ -26,7 +26,7 @@ function Home() {
   extraction: false,
   rag: false,
 });
-
+ console.log(url)
 const handleAnalyze = async () => {
   if (!url.trim()) {
     alert("Please enter a YouTube URL");
