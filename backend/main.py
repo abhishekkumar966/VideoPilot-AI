@@ -29,7 +29,7 @@ app.add_middleware(
 # Register Routes
 app.include_router(analyze_router)
 app.include_router(chat_router)
-
+4
 @app.get("/")
 def home():
     return {

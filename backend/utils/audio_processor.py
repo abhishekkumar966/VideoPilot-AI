@@ -16,12 +16,20 @@ COOKIE_FILE = os.path.join(PROJECT_ROOT, "cookies.txt")
 # -----------------------------
 # FFmpeg Configuration
 # -----------------------------
-if os.path.exists("/usr/bin/ffmpeg"):
-    AudioSegment.converter = "/usr/bin/ffmpeg"
+FFMPEG_DIR = r"C:\Users\ASUS\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1.2-full_build\bin"
 
-if os.path.exists("/usr/bin/ffprobe"):
-    AudioSegment.ffprobe = "/usr/bin/ffprobe"
+FFMPEG_EXE = os.path.join(FFMPEG_DIR, "ffmpeg.exe")
+FFPROBE_EXE = os.path.join(FFMPEG_DIR, "ffprobe.exe")
 
+# Add FFmpeg directory to PATH for current Python process
+os.environ["PATH"] = FFMPEG_DIR + os.pathsep + os.environ.get("PATH", "")
+
+# Configure pydub
+AudioSegment.converter = FFMPEG_EXE
+AudioSegment.ffprobe = FFPROBE_EXE
+
+print(f"✅ FFmpeg: {AudioSegment.converter}")
+print(f"✅ FFprobe: {AudioSegment.ffprobe}")
 
 # -----------------------------
 # Download YouTube Audio
@@ -32,7 +40,7 @@ def download_youtube_audio(url: str) -> str:
     ydl_opts = {
         "format": "bestaudio/best",
         "outtmpl": output_path,
-        "ffmpeg_location": "/usr/bin",
+        "ffmpeg_location": FFMPEG_DIR,
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
@@ -40,9 +48,12 @@ def download_youtube_audio(url: str) -> str:
                 "preferredquality": "192",
             }
         ],
+        "quiet": False,
+        "noplaylist": True,
+        "nocheckcertificate": True,
     }
 
-    # Use cookies only if the file exists
+    # Use cookies only if available
     if os.path.exists(COOKIE_FILE):
         ydl_opts["cookiefile"] = COOKIE_FILE
 
@@ -58,11 +69,15 @@ def download_youtube_audio(url: str) -> str:
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=True)
 
-        base = os.path.splitext(
-            ydl.prepare_filename(info)
-        )[0]
+        filename = ydl.prepare_filename(info)
+        base = os.path.splitext(filename)[0]
 
-        return base + ".wav"
+        wav_file = base + ".wav"
+
+        if not os.path.exists(wav_file):
+            raise FileNotFoundError(f"WAV file not created: {wav_file}")
+
+        return wav_file
 
 
 # -----------------------------
@@ -107,16 +122,16 @@ def chunk_audio(wav_path: str, chunk_minutes: int = 10) -> list:
 # -----------------------------
 def process_input(source: str) -> list:
     if source.startswith(("http://", "https://")):
-        print("Detected YouTube URL. Downloading audio...")
+        print("🎬 Detected YouTube URL. Downloading audio...")
         wav_path = download_youtube_audio(source)
     else:
-        print("Detected local file. Converting to WAV...")
+        print("📁 Detected local file. Converting to WAV...")
         wav_path = convert_to_wav(source)
 
-    print("Chunking audio...")
+    print("✂️ Chunking audio...")
 
     chunks = chunk_audio(wav_path)
 
-    print(f"Audio ready — {len(chunks)} chunk(s) created.")
+    print(f"✅ Audio ready — {len(chunks)} chunk(s) created.")
 
     return chunks
